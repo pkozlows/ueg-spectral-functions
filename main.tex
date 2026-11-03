@@ -1,0 +1,198 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% This is a "template" model document for submission to the
+%% American Chemical Society (ACS).
+%%
+%% The guidance here contains information about how you may wish to
+%% modify it to match the requirements of various ACS journals. The
+%% ACS do *not* typeset accepted articles using LaTeX, so there is
+%% no specific class required.
+%%
+%% This template deliberately does *not* seek to reproduce
+%% the layout of the typeset journal: this is explicitly not
+%% required by the ACS for LaTeX submissions.
+%%
+%% Please report any issues with the template at
+%% https://github.com/josephwright/acs-template/issues
+%%
+%% Released under the Creative Commons 0 license
+%% https://creativecommons.org/public-domain/cc0/
+%% 
+%% Copyight (c) 2025 Joseph Wright
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[letterpaper]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Font setup - delete if you are using LuaLaTeX
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[T1]{fontenc}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Adjust the margins and allow for line spacing
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{geometry}
+\geometry{margin = 1in}
+\usepackage{setspace}
+\usepackage{bm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Reference support
+%%
+%% The recommended method for producing the reference section is
+%% to use biblatex. If you wish to use a classical BibTeX
+%% approach, this is easiest to achieve using the achemso package.
+%% In that case, you should remove the biblatex lines.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% You can adjust the printing of DOI, article title, etc. using
+% package options, e.g. "doi = true"; see the biblatex manual for
+% details of adjusting the number of authors printed, e.g.
+% "maxnames = 15" to print no more than 15 authors.
+% \usepackage[style = chem-acs]{biblatex}
+% \addbibresource{pqe.bib}
+% If you are using classical BibTeX, remove the above lines and 
+% uncomment:
+\usepackage{achemso}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Graphic inclusion and scheme and chart support3....
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+\usepackage{float}
+\newfloat{scheme}{htbp}{los}
+\floatname{scheme}{Scheme}
+\floatname{chart}{Chart}
+\newfloat{graph}{htbp}{loh}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Common support packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{chemformula} % Formulas using \ch{}
+% or
+\usepackage[version = 4]{mhchem} % Formulas using \ce{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Many journals require that sections are unnumbered: this 
+%% is activated here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{secnumdepth}{-1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Place any additional macros here.  Please use \newcommand* where
+%% possible, and avoid layout-changing macros (which are not used
+%% when typesetting).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand*\mycommand[1]{\texttt{\emph{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Author and title data:
+%% the authblk package is currently the simplest way to provide this
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{authblk}
+\author[1]{Patryk Kozlowski}
+\affil[1]{Department of Chemistry and Chemical Biology, Harvard University, Cambridge, MA 02138, USA}
+
+
+\title{Theoretical Spectroscopy via Many-Body Perturbation Theory}
+
+\begin{document}
+
+\maketitle
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Start the main part of the manuscript here.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\abstract{
+}
+\section{Introduction}
+Theoretical and experimental spectroscopies are complementary techniques that are used to elucidate the electronic structure of materials. 
+\subsubsection{TODO: Why do we study the electron gas at rs = 4; It is a good model for alkali metals, and this density is also interesting because of the outside correlation contribution. Such that we are no longer in the perturbative regime 
+}
+\subsubsection{TODO: Why GW, why it is done in the one-shot formulation, and what is beneficial about a cumulant expansion on top of g0w0 }
+For decades, the state-of-the-art method for the former has been the GW + cumulant approach. The idea behind this method is that it performs a cumulant expansion of the empirically successful g0w0 self-energy.It has been able to give a qualitatively correct description of the spectra of simple alkali metals, Offering a reasonable prediction of the location of peaks spaced . However, GW + C exhibits a severe starting-point dependence. In principle, this can be alleviated Through a self-consistent solution of Hedin's equations, but this becomes computationally costly, and accuracy often becomes degraded with respect to the one-shot version of the theory. It has been postulated that the one-shot g0w0 Performs well due to a fortuitous cancellation of errors.  and is nowhere near the numerically exact answer for finite supercells of the UEG. 
+\subsubsection{TODO: EOM-CC As a potential solution, but Limited application due to Prohibitive scaling  }
+Coupled cluster theory, as a non-perturbative framework, promises to remedy these issues. However, Its application is limited to small supercells, Owing to its steep computational scaling. \\
+\subsubsection{TODO: What is the electronic polaron, and why is thinking about it useful? }
+It is well known that core spectroscopy gives rise to the electronic polaron, Where the suddenly created core hole couples to bosonic degrees of freedom in the system. In this work, we exploit this observation, writing down a Physically motivated  Hamiltonian for this electronic polaron and then solving for its Green's function. We are aided in this endeavor by the fact that recent years have seen the rapid development of techniques that are able to give a near-exact solution of the polaron problem at a reasonable computational cost. \\
+In Section 1, we begin by introducing the quasiboson Hamiltonian. Then we explain the  techniques that we have used to solve it: namely, the self-consistent cumulant expansion and delocalized coupled cluster theory. Then, in Section 2, we analyze results obtained from these various approaches. Finally, in Section 3, we summarize our findings and discuss future directions for this work.
+\section{Theory}
+\subsubsection{TODO: Introduce our RPA theory. }
+\subsection{One-shot GW+C }
+Note that in the electron gas, the local density approximation is equivalent to the bare kinetic energy, so it contains no correlation. 
+In the cumulant formalism, we solve for the Green's function as 
+\begin{equation}
+G_k^R(t)=-i\theta(t)e^{-i\epsilon^{\rm LDA}_k t}e^{C_k(t)}.
+\label{eq:retarded-cumulant}
+\end{equation}
+Inherent to all these methods is the cost associated with diagonalizing the Casida equation, which naively scales as sixth order. However, using cubic symmetry in the electron gas allows us to diagonalize the Casida equation within each momentum transfer sector, which reduces the Casida diagonalization cost to linear order. 
+\subsubsection{Time-ordered}
+Here, the dynamical cumulant is always given as
+\begin{equation}
+    \tilde{C}_k^T(t) = \int d\omega \frac{\beta_k^{ \pm}(\omega)}{\omega^2}\left(e^{-i \omega t}+i \omega t-1\right) ,
+\end{equation}
+where $\beta_k^{ \pm}(\omega)= \frac{1}{\pi}\left|\operatorname{Im} \Sigma_k^R\left(\omega+\epsilon_k\right)\right| \theta\left( \pm\left(\epsilon_{k_F}-\epsilon_k-\omega\right)\right)$. The non-interacting part is $G_k^{T, 0}(t)=\mp i \theta( \pm t) \theta\left( \pm\left(\epsilon_k-\epsilon_{k F}\right)\right) e^{-i \epsilon_k^{\text{eff}} t}$, where the upper (lower) sign refers to particles with $k>k_F$ (holes $k<k_F$ ), and $\theta$ is the unit step function.
+\subsubsection{retarded}
+Here, the dynamical cumulant is always given as 
+\begin{equation}
+    \tilde{C}_k^R(t) = \frac{1}{\pi}\int d\omega \frac{|\operatorname{Im} \Sigma_k^R(\omega+\tilde{\epsilon_k})|}{\omega^2} \left( e^{-i\omega t} + i\omega t - 1 \right),
+\end{equation}
+where for $G_{k,0}@\mathrm{LDA}$, $\tilde{\epsilon_k} = \epsilon_k^{\mathrm{LDA}}$.  The non-interacting reference always has the form $G_{k,0}^R(t) = -i \Theta(t) e^{-i\epsilon_k t}$.
+Verning showed that in the thermodynamic limit, the retarded cumulant gives a more physical spectral function, As it treats particles and holes on an equal footing. However, she showed that at the bottom of the band, the TC and the RC are equivalent.
+\subsubsection{BWs2+C}
+\subsection{Quasiboson formalism}
+The methods discussed below solve the Hamiltonian
+\begin{align}
+\hat{H}
+&=
+\hat{H}_{\rm el}
++
+\hat{H}_{\rm pl}
++
+\hat{H}_{\rm ep}
+\end{align}
+with $\hat{H}_{\rm el}=  \sum_{\bm{k}\in\mathcal{O}}
+\epsilon_{\bm{k}}^{\rm HF}
+a_{\bm{k}}^{\dagger}a_{\bm{k}}$, $\hat{H}_{\rm pl}= \sum_{\nu_{\bm{q}}\in\mathcal{M}}
+\omega_{\nu_{\bm{q}}}
+b_{\nu_{\bm{q}}}^{\dagger}
+b_{\nu_{\bm{q}}}$, and $\hat{H}_{\rm ep}= \sum_{\bm{k},\bm{k}+\bm{q}\in\mathcal{O}}
+\sum_{\nu_{\bm{q}}\in\mathcal{M}}
+g_{\nu}^{\rm pl}(\bm{k},\bm{q})
+a_{\bm{k}+\bm{q}}^{\dagger}
+a_{\bm{k}}
+\left(
+b_{\nu_{-\bm{q}}}^{\dagger}
++
+b_{\nu_{\bm{q}}}
+\right)$, where $\mathcal{O}$ and $\mathcal{M}$ are the sets of occupied bands and plasmonic modes, respectively. As indicated, given a plasmonic mode $\nu$, the associated momentum transfer $\bm{q}$ is already determined. The Plasmonic  frequencies $\omega_{\nu_{\bm{q}}}$and electron-plasmon couplings $g_{\nu}^{\rm pl}(\bm{k},\bm{q})$ are The eigenvalues  and transition densities taken from a direct RPA calculation starting from n. LDA reference as . The seasoned GW practitioner may be wary of this formulation because it seemingly mixes Hartree-fock single-particle energies with LDA screening. However, this has been done with empirical success in the self-consistent GW community for decades, so we pursue the same approach in defining the quasiboson Hamiltonian. 
+
+\subsubsection{Self-consistent cumulant expansion}
+For many decades, self-consistency has been pursued has been pursued within the Dyson framework. There have only been a few studies of carrying out the self-consistency in the cumulant formalism, which have shown promise for computing spectral functions of the hosting model . This is the first.  application of the self-consistent cumulant expansion to A fermionic system in the electron gas. Note that this has been done before by Holmes, but this is not true self-consistency, as we show in the appendix.  Specifically, we compute the retarded Green's function in the time domain as In equation X, and then we solve for the cumulant as 
+We are always solving
+\begin{equation}
+\frac{dC_k}{dt}=-i\Lambda_k - \sum_{i\in\mathcal{S}}\sum_\nu|g_{ki\nu}|^2\int_0^t\!d\tau\; e^{-i\Delta_{ki\nu}(t-\tau)}\; e^{-[C_k(t)-C_k(\tau)]+[C_i(t)-C_i(\tau)]},
+\end{equation}
+where $\Delta_{ki\nu}=\epsilon^{\rm LDA}_i-\epsilon^{\rm LDA}_k-{\Omega_\nu}$, $\Lambda_k$ is a constant, ${g_{ki\nu}}$ is the electron-plasmon coupling, and $\mathcal{S}$ is some set of states.
+\subsubsection{Delocalized coupled-cluster theory}
+The D2 ansatz is 
+We compute the DCC ground state by considering the following processes of excitation out of the reference Hartree-fock reference. Then we apply the tangent-space formalism to compute the spectral functions. We use the nomenclature dCC-X-SY-(Z, A) To denote a method, which, For the ground state calculation is X order In the fermions with Y coupled electron-boson excitations. See this paper for more details. 
+\section{Results}
+Here, we study finite supercells of the electron gas at rs = 4, converging onto the thermodynamic limit. To begin, we consider the smallest possible supercell with 14 electrons in 19 orbitals (14e19o), for which, We can compare the methods of our study with  the numerically exact result with DMRG, which well coincides wtith CCSDT.\\
+For 114e485o, 
+\section{Conclusions}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Start the main part of the manuscript here.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% If you are using classical BibTeX rather than biblatex,
+%% remove the \printbibliography and uncomment the \bibliograpy one
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\bibliography{pqe}
+
+
+\end{document}
