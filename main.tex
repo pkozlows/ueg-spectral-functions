@@ -101,41 +101,120 @@
 %% Start the main part of the manuscript here.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \abstract{
-}
-\section{Introduction}
-Theoretical and experimental spectroscopies are complementary techniques that are used to elucidate the electronic structure of materials. 
-\subsubsection{TODO: Why do we study the electron gas at rs = 4; It is a good model for alkali metals, and this density is also interesting because of the outside correlation contribution. Such that we are no longer in the perturbative regime 
-}
-\subsubsection{TODO: Why GW, why it is done in the one-shot formulation, and what is beneficial about a cumulant expansion on top of g0w0 }
-For decades, the state-of-the-art method for the former has been the GW + cumulant approach. The idea behind this method is that it performs a cumulant expansion of the empirically successful g0w0 self-energy.It has been able to give a qualitatively correct description of the spectra of simple alkali metals, Offering a reasonable prediction of the location of peaks spaced . However, GW + C exhibits a severe starting-point dependence. In principle, this can be alleviated Through a self-consistent solution of Hedin's equations, but this becomes computationally costly, and accuracy often becomes degraded with respect to the one-shot version of the theory. It has been postulated that the one-shot g0w0 Performs well due to a fortuitous cancellation of errors.  and is nowhere near the numerically exact answer for finite supercells of the UEG. 
-\subsubsection{TODO: EOM-CC As a potential solution, but Limited application due to Prohibitive scaling  }
-Coupled cluster theory, as a non-perturbative framework, promises to remedy these issues. However, Its application is limited to small supercells, Owing to its steep computational scaling. \\
-\subsubsection{TODO: What is the electronic polaron, and why is thinking about it useful? }
-It is well known that core spectroscopy gives rise to the electronic polaron, Where the suddenly created core hole couples to bosonic degrees of freedom in the system. In this work, we exploit this observation, writing down a Physically motivated  Hamiltonian for this electronic polaron and then solving for its Green's function. We are aided in this endeavor by the fact that recent years have seen the rapid development of techniques that are able to give a near-exact solution of the polaron problem at a reasonable computational cost. \\
-In Section 1, we begin by introducing the quasiboson Hamiltonian. Then we explain the  techniques that we have used to solve it: namely, the self-consistent cumulant expansion and delocalized coupled cluster theory. Then, in Section 2, we analyze results obtained from these various approaches. Finally, in Section 3, we summarize our findings and discuss future directions for this work.
+}\section{Introduction}
+\label{sec:intro}
+Core spectroscopy is notoriously difficult to simulate. The sudden creation of a hole couples to the plasmonic modes of the system, forming an electronic polaron. As a result, the observed spectrum consists of a sharp quasiparticle peak accompanied by satellite structures that arise from the coupling of the hole to the plasmons of the system. This spectrum is described by the spectral function, which is proportional to the imaginary part of the retarded Green's function.
+
+Many-body perturbation theory, the state-of-the-art approach for excited-state calculations, is commonly used to obtain the spectral function. Specifically, it constructs the Green's function through a perturbative expansion in the screened Coulomb interaction $W$. Its lowest-order form, known as $G_0W_0$, has been empirically successful in describing the position and lifetime of the quasiparticle peak, but it fails to describe the satellite features. One might hope to remedy this by performing the expansion self-consistently; however, self-consistent $GW$ does not necessarily yield a better description of the satellites than $G_0W_0$.
+% TODO: cite self-consistent GW satellite studies
+
+Another option is coupled-cluster theory, which has become the gold standard For computing ground-state properties in molecular quantum chemistry. Excited-state properties, such as spectral functions, can be obtained from its equation-of-motion extension (EOM-CC). However, the  steep computational scaling of EOM-CC limits its application to small supercells.
+
+A viable alternative is the cumulant expansion, which resums the perturbation series, thereby incorporating a class of vertex corrections. As a result, it qualitatively reproduces the core spectrum, generating a sequence of plasmon satellites. The cumulant expansion is typically performed on top of a $G_0W_0$ calculation, an approach we refer to as $GW$+C. Consequently, $GW$+C inherits the starting-point dependence of $G_0W_0$. Furthermore, studies of finite supercells of the electron gas have shown that $G_0W_0$ deviates significantly from numerically exact results.
+% TODO: cite finite-supercell benchmarks
+
+A remedy lies in the observation that core spectroscopy gives rise to an electronic polaron, in which the suddenly created hole couples to the bosonic degrees of freedom of the system. In this work, we exploit this observation by writing down a physically motivated Hamiltonian for the electronic polaron (albeit deriving a controlled approximation to the \emph{ab initio} problem) and solving for its Green's function. We are aided in this endeavor by the rapid development, in recent years, of techniques that provide near-exact solutions of polaron problems at reasonable computational cost.
+% \subsubsection{TODO: Why do we study the electron gas at rs = 4; It is a good model for alkali metals, and this density is also interesting because of the outside correlation contribution. Such that we are no longer in the perturbative regime
+% }
+
+In Sec.~\ref{sec:theory}, we introduce the theories used to tackle this problem, beginning with the state-of-the-art $GW$+C approach, followed by our quasiboson Hamiltonian and the techniques we use to solve it, namely the self-consistent cumulant expansion and delocalized coupled-cluster theory. In Sec.~\ref{sec:results}, we analyze the results obtained from these approaches. Finally, in Sec.~\ref{sec:conclusions}, we summarize our findings and discuss future directions.
+
 \section{Theory}
-\subsubsection{TODO: Introduce our RPA theory. }
-\subsection{One-shot GW+C }
-Note that in the electron gas, the local density approximation is equivalent to the bare kinetic energy, so it contains no correlation. 
-In the cumulant formalism, we solve for the Green's function as 
+\label{sec:theory}
+We compute spectral functions of the homogeneous electron gas at a Wigner--Seitz radius of $r_s = 4$. The electron gas is a bellwether system for excited-state methods, whose ultimate goal is to predict the spectral functions of real materials. This density is of practical interest because it coincides with the valence electron density of the simple alkali metals. It is also of theoretical interest because, at $r_s = 4$, the electron gas lies outside the perturbative regime, where there is a notable lack of existing  methods that can accurately compute excited states.
+
+The theories investigated below make use of the screened Coulomb interaction, in which the screening is obtained from the direct random-phase approximation (RPA). This amounts to solving the Casida equation
 \begin{equation}
-G_k^R(t)=-i\theta(t)e^{-i\epsilon^{\rm LDA}_k t}e^{C_k(t)}.
-\label{eq:retarded-cumulant}
+\begin{pmatrix}
+\mathbf{A} & \mathbf{B} \\
+-\mathbf{B} & -\mathbf{A}
+\end{pmatrix}
+\begin{pmatrix}
+\mathbf{X} \\
+\mathbf{Y}
+\end{pmatrix}
+=
+\begin{pmatrix}
+\mathbf{X} \\
+\mathbf{Y}
+\end{pmatrix}
+\mathbf{\Omega},
+\label{eq:casida}
+%     \left(\begin{array}{ll}
+% \mathrm{A} & \mathrm{~B} \\
+% \mathrm{~B} & \mathrm{~A}
+% \end{array}\right)\left(\begin{array}{ll}
+% \mathrm{X} & \mathrm{Y} \\
+% \mathrm{Y} & \mathrm{X}
+% \end{array}\right)=\left(\begin{array}{cc}
+% \mathrm{X} & -\mathrm{Y} \\
+% -\mathrm{Y} & \mathrm{X}
+% \end{array}\right)\left(\begin{array}{ll}
+% \Omega & 0 \\
+% 0 & \Omega
+% \end{array}\right)
 \end{equation}
-Inherent to all these methods is the cost associated with diagonalizing the Casida equation, which naively scales as sixth order. However, using cubic symmetry in the electron gas allows us to diagonalize the Casida equation within each momentum transfer sector, which reduces the Casida diagonalization cost to linear order. 
-\subsubsection{Time-ordered}
-Here, the dynamical cumulant is always given as
+where
+\begin{align}
+    A_{ia,jb} &= \delta_{ij}\delta_{ab} \left(\epsilon_a^{\rm LDA}-\epsilon_i^{\rm LDA}\right) + v(\mathbf{q}),\\
+    B_{ia,jb} &= v(\mathbf{q}).
+% \left(\green{\epsilon_a^{\rm HF}}+\red{\frac{v_M}{2}}-\green{\epsilon_i^{\rm HF}}-\red{\frac{v_M}{2}}\right)+\langle\Phi_i^a|\green{\hat V_{\rm res}}|\Phi_j^b\rangle\\
+%     &= \delta_{ij}\delta_{ab}\left(\green{\epsilon_a^{\rm HF}}-\green{\epsilon_i^{\rm HF}}\right)+\langle\Phi_i^a|\green{\hat V_{\rm res}}|\Phi_j^b\rangle\\
+% B_{ia,jb} &= \langle\Phi_i^a|\green{\hat V_{\rm res}}|\Phi_j^b\rangle.
+\end{align}
+Here, $i$ and $j$ label bands, $a = i + \mathbf{q}$ and $b = j + \mathbf{q}$ label unoccupied orbitals, and $v(\mathbf{q}) = 4\pi/(V q^2)$ is the Coulomb interaction in a supercell of volume $V$.
+
+Because momentum is conserved, the Casida matrix is block diagonal in the transferred momentum $\mathbf{q}$. Diagonalizing each block yields a set of bosonic modes $\nu$ (which include the plasmon) with frequencies $\Omega_\nu(\mathbf{q})$. The corresponding hole--boson coupling is
 \begin{equation}
-    \tilde{C}_k^T(t) = \int d\omega \frac{\beta_k^{ \pm}(\omega)}{\omega^2}\left(e^{-i \omega t}+i \omega t-1\right) ,
+g_{\nu}(\mathbf{k},\mathbf{q}) = \sqrt{2}\sum_{ia} (\mathbf{k}\,,\mathbf{k}-\mathbf{q}\,|\,i\,a)\,(\mathbf{X}+\mathbf{Y})_{ia,\nu}
+= \sqrt{2}\,v(\mathbf{q})\sum_{i}(\mathbf{X}+\mathbf{Y})_{i,\,i+\mathbf{q};\,\nu},
+\label{eq:coupling}
 \end{equation}
-where $\beta_k^{ \pm}(\omega)= \frac{1}{\pi}\left|\operatorname{Im} \Sigma_k^R\left(\omega+\epsilon_k\right)\right| \theta\left( \pm\left(\epsilon_{k_F}-\epsilon_k-\omega\right)\right)$. The non-interacting part is $G_k^{T, 0}(t)=\mp i \theta( \pm t) \theta\left( \pm\left(\epsilon_k-\epsilon_{k F}\right)\right) e^{-i \epsilon_k^{\text{eff}} t}$, where the upper (lower) sign refers to particles with $k>k_F$ (holes $k<k_F$ ), and $\theta$ is the unit step function.
-\subsubsection{retarded}
-Here, the dynamical cumulant is always given as 
+where the second equality follows because, for plane waves, every allowed two-electron integral equals $v(\mathbf{q})$; the coupling is therefore independent of $\mathbf{k}$. A naive diagonalization of the full Casida matrix scales as the sixth power of system size. By exploiting momentum conservation, we instead diagonalize a set of much smaller, independent blocks, one per momentum sector $\mathbf{q}$; the cubic symmetry of the electron gas further reduces the number of symmetry-inequivalent sectors that must be treated.
+
+Note that in the electron gas, the LDA exchange--correlation potential is a constant, so the LDA eigenvalues are simply the free-electron kinetic energies shifted by $V^{\rm xc}$. The LDA starting point therefore contains no correlation in its dispersion.
+% \subsubsection{TODO: Introduce our RPA theory. }
+
+\subsection{One-shot {GW}+C}
+\label{sec:gwc}
+In the cumulant formalism, the Green's function is written as
 \begin{equation}
-    \tilde{C}_k^R(t) = \frac{1}{\pi}\int d\omega \frac{|\operatorname{Im} \Sigma_k^R(\omega+\tilde{\epsilon_k})|}{\omega^2} \left( e^{-i\omega t} + i\omega t - 1 \right),
+G_k(t) = G_k^{0}(t)\, e^{C_k(t)},
+\label{eq:cumulant}
 \end{equation}
-where for $G_{k,0}@\mathrm{LDA}$, $\tilde{\epsilon_k} = \epsilon_k^{\mathrm{LDA}}$.  The non-interacting reference always has the form $G_{k,0}^R(t) = -i \Theta(t) e^{-i\epsilon_k t}$.
-Verning showed that in the thermodynamic limit, the retarded cumulant gives a more physical spectral function, As it treats particles and holes on an equal footing. However, she showed that at the bottom of the band, the TC and the RC are equivalent.
+where $G_k^{0}(t)$ is a non-interacting reference Green's function built from $\epsilon_k^{\rm LDA}$, and $C_k(t) = \tilde{C}_k(t) - i\Lambda_k t$ is the cumulant. The static part of the cumulant is $\Lambda_k = \Sigma_k^{\rm x} - V_k^{\rm xc}$, where $\Sigma_k^{\rm x}$ is the exchange self-energy. The reference Green's function and the dynamic part $\tilde{C}_k(t)$ depend on whether one constructs the time-ordered or the retarded cumulant, as described below.
+
+\subsubsection{Time-ordered cumulant}
+In the time-ordered cumulant (TC), the dynamic part is
+\begin{equation}
+    \tilde{C}_k^{\rm T}(t) = \int d\omega\, \frac{\beta_k^{\pm}(\omega)}{\omega^2}\left(e^{-i \omega t}+i \omega t-1\right),
+    \label{eq:tc}
+\end{equation}
+where
+\begin{equation}
+\beta_k^{\pm}(\omega) = \frac{1}{\pi}\left|\operatorname{Im} \Sigma_k^{\rm R}\!\left(\omega+\epsilon_k^{\rm LDA}\right)\right| \theta\!\left(\pm\left(\omega + \epsilon_k^{\rm LDA} - \epsilon_{\rm F}\right)\right).
+\end{equation}
+The non-interacting reference is
+\begin{equation}
+G_k^{{\rm T},0}(t) = \mp i\, \theta(\pm t)\, \theta\!\left(\pm\left(\epsilon_k^{\rm LDA}-\epsilon_{\rm F}\right)\right) e^{-i \epsilon_k^{\rm LDA} t}.
+\end{equation}
+Throughout, the upper (lower) sign refers to particles with $k>k_{\rm F}$ (holes with $k<k_{\rm F}$), $\epsilon_{\rm F} \equiv \epsilon_{k_{\rm F}}^{\rm LDA}$ is the Fermi energy, and $\theta$ is the Heaviside step function. Thus, for a hole, only the portion of the self-energy below the Fermi level contributes to the cumulant.
+
+\subsubsection{Retarded cumulant}
+In the retarded cumulant (RC), the dynamic part is
+\begin{equation}
+    \tilde{C}_k^{\rm R}(t) = \int d\omega\, \frac{\beta_k^{\rm R}(\omega)}{\omega^2} \left( e^{-i\omega t} + i\omega t - 1 \right),
+    \label{eq:rc}
+\end{equation}
+where
+\begin{equation}
+\beta_k^{\rm R}(\omega) = \frac{1}{\pi}\left|\operatorname{Im} \Sigma_k^{\rm R}\!\left(\omega+\epsilon_k^{\rm LDA}\right)\right|,
+\end{equation}
+so that both the particle and hole portions of the self-energy contribute. The non-interacting reference always takes the form
+\begin{equation}
+G_k^{{\rm R},0}(t) = -i\, \theta(t)\, e^{-i\epsilon_k^{\rm LDA} t}.
+\end{equation}
+Kas, Rehr, and Reining showed that, in the thermodynamic limit, the retarded cumulant yields a more physical spectral function because it treats particles and holes on an equal footing~\cite{kas2014}. They also showed that, at the bottom of the band, the TC and RC are essentially equivalent.
 \subsubsection{BWs2+C}
 \subsection{Quasiboson formalism}
 The methods discussed below solve the Hamiltonian
